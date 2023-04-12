@@ -90,12 +90,21 @@ Step 3: Setup Dockerhost Environment
 - add user to docker group
 	
 		usermod -aG docker dockeradmin	
+		
+- enable password based authentication and restart the service: because by default ec2 instances doesn`t allow password based authentification
+
+		vi /etc/ssh/sshd-confing
+		service sshd reload
 	
 - install Publish over SSH plugin - pentru a putea copia artefactele din jenkins in dockerhost
 
-		Manage > Jenkins > Jenkins plugins > available > Publish over SSH > Install withouw restart
+		Manage Jenkins > Manage plugins > Available > Publish over SSH > Install withouw restart
+		
+- configure Dockerhost in the Jenkins:
+		
+		Manage Jenkins > Configure System > Publish over SSH > SSH Servers > Add name > Add host name > Add username > Add password > Test connection
 
-- create new directory:
+- create docker directory:
 
 		cd /opt
 		mkdir docker
@@ -117,6 +126,15 @@ Step 3: Setup Dockerhost Environment
 		useradd ansadmin
 		passwd ansadmin
 
+- add ansadmin to sudoers:
+
+		visudo 
+		ansadmin ALL=(ALL) NOPASSWD: ALL
+
+- enable password based login:
+
+		 vi /etc/ssh/sshd-config
+
 - connect with ansadmin user:
 
 		 sudo su - ansadmin
@@ -125,15 +143,11 @@ Step 3: Setup Dockerhost Environment
 
 		ssh-keygen
 
-- enable password based login:
-
-		 vi /etc/ssh/sshd-config
-
 - install ansible:
 
 		 sudo amazon-linux-extras install ansible2
      
-Step 5: Add Dockerhost as a slave to our Ansible node
+Step 5: Add Dockerhost to as a slave to Ansible system  - so that Ansible control node can be able to manage our Dockerhost
 
 - ON DOCKER HOST:
 - create ansadmin user:
@@ -145,23 +159,19 @@ Step 5: Add Dockerhost as a slave to our Ansible node
 
 		visudo
 		ansadmin ALL=(ALL) NOPASSWD: ALL
-		
-- enable password based login: 
-
-		vi /etc/ssh/sshd-confing
 
 - ON ANSIBLE server:
-- add Dockerhost IP to hosts file:
+- add Dockerhost as a manager node: adding Dockerhost private ip adress into the default inventory file
 	
 		 vi /etc/ansible/hosts
 
-- add Ansible IP to hosts file: 
+- copy ansible`s ansadmin user public key into dockerhost ansadmin user:	
 
-		vi /etc/ansible/hosts
-
-- copy ansible server public key into dockerhost ansadmin user:	
-
-		ssh-copy-id 172.31.21.252
+		ssh-copy-id [Dockerhost private ip]
+		
+- test connection:
+		
+		ansible all -m ping
 
 - make new directory called docker /opt
 	
@@ -174,12 +184,29 @@ Step 5: Add Dockerhost as a slave to our Ansible node
 		
 - install docker:
 
+		cd/opt/docker
 		yum install docker
 
 - add ansadmin to docker group:
 	
 		usermod -aG docker ansadmin
 		service docker start     
+
+- Add Ansible private ip adress into the default inventory file: [ansible] - mention it as a group
+	
+		 vi /etc/ansible/host
+
+- Copy ansible`s ansadmin public key to the ansible system: - to be able to comunicate with the system
+
+		ssh-copy-id [Ansible private ip]
+
+- Test connection:
+	
+		ansible all -m ping
+
+- login into DockerHub
+		
+		docker login
     
 Step 6: Integrate Ansible with Jenkins
 
@@ -189,16 +216,19 @@ Step 6: Integrate Ansible with Jenkins
 	
 - Enable connection between Ansible and Jenkins
 
-		Manage Jenkins > Configure System > Publish over SSH > SSH Servers > Add host name > Add username > Add password > Test connection
+		Manage Jenkins > Configure System > Publish over SSH > SSH Servers > Add name > Add host name > Add username > Add password > Test connection
     
 Step 7: create Dockerfile:
 
-   		 /opt/docker/Dockerfile
+		/opt/docker/Dockerfile
+		 
 
 Step 8: create ansible playbook to create docker image and push it intoo dockerhub: 
     
-  		  /opt/docker/regapp.yml
+		/opt/docker
+		vi regapp.yml
 
 Step 9: create ansible playbook to create docker container: 
 
-    /opt/docker/deploy regapp.yml
+		/opt/docker
+		vi deploy regapp.yml
