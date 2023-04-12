@@ -2,21 +2,21 @@
 # CI/CD Pipeline to Build and Deploy a Java application
 
 Tooluri folosite:
-	- Git - ca si local version control system
-	- GitHub - ca si distributor version control system
-	- Jenkins - ca si continuos integration tool
-	- Maven - ca si build tool
-	- Ansible - pentru configuration management si deployment tool
-	- Docker - pentru containerizare
-	- MobaXterm - pentru a ma conecta pe instante
-	- Am creat tot acest environment pe AWS
+- Git - ca si local version control system
+- GitHub - ca si distributor version control system
+- Jenkins - ca si continuos integration tool
+- Maven - ca si build tool
+- Ansible - pentru configuration management si deployment tool
+- Docker - pentru containerizare
+- MobaXterm - pentru a ma conecta pe instante
+- Am creat tot acest environment pe AWS
 
 Pentru realizarea acestui proiect::
-	- Voi modifica codul local si ii voi da push pe github.
-	- Cand modificarea ajunge in GitHub, Jenkins ii va da pull codului si ii va da build cu ajutorul lui Maven. 
-	- Odata ce Jenkins da build codului, genereaza artefacte. 
-	- Aceste artefacte vor fi copiate in Ansible 	
-	- Ansible va containeriza aceste artefacte
+- Voi modifica codul local si ii voi da push pe github.
+- Cand modificarea ajunge in GitHub, Jenkins ii va da pull codului si ii va da build cu ajutorul lui Maven. 
+- Odata ce Jenkins da build codului, genereaza artefacte. 
+- Aceste artefacte vor fi copiate in Ansible 	
+- Ansible va containeriza aceste artefacte
 
 Step 1: Setup Jenkins server:
 
