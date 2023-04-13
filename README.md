@@ -226,15 +226,15 @@ Step 7: create Dockerfile:
 
 Step 8: create ansible playbook to create docker image and push it intoo dockerhub: 
     
-		/opt/docker
+		cd /opt/docker
 		vi regapp.yml
 		
 
 Step 9: create ansible playbook to create docker container: 
 
-		/opt/docker
+		cd /opt/docker
 		vi deploy regapp.yml
 		
 Step 10: Create Jenkins Job
 
-Step 11: Make changes to the code and commit in to github
+Step 11: Make changes to the code and commit it to github
