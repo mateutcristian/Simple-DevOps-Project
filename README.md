@@ -147,7 +147,7 @@ Step 3: Setup Dockerhost Environment
 
 		 sudo amazon-linux-extras install ansible2
      
-Step 5: Add Dockerhost to as a slave to Ansible system  - so that Ansible control node can be able to manage our Dockerhost
+Step 5: Add Dockerhost to as a slave to Ansible system 
 
 - ON DOCKER HOST:
 - create ansadmin user:
