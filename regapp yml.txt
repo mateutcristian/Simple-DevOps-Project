@@ -1,0 +1,15 @@
+---
+- hosts: ansible #doar ip-urile aflate in grupul ansible vor fi afectate de playbook"
+
+  tasks:
+    - name: create docker image
+      command: docker build -t regapp:latest . #Aceasta comanda construieste o image docker numita regapp:latest folosind dockerfile-ul din directorul curent
+      args:
+        chdir: /opt/docker #schimba directorul curent in /opt/docker
+
+    - name: create tag to push image onto dockerhub
+      command: docker tag regapp:latest mateutcristian/regapp:latest #Pentru a putea da  push imaginii pe DockerHub a trebuit sa ii ofer tagul mateutcristian reprezentand username-ul
+
+    - name: push docker image
+      command: docker push mateutcristian/regapp:latest #Aceasta comanda da push pe DockerHub imaginii create anterior
+
